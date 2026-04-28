@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-@import url('[https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css](https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css)');
+/* 폰트 불러오기 (마크다운 형식이 아닌 순수 CSS 주소여야 합니다) */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
 :root {
   font-family: 'Pretendard', sans-serif;
@@ -10,4 +11,11 @@ body {
   margin: 0;
   background-color: #F8F9FB;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 디자인 복구를 위한 추가 레이아웃 수정 */
+#root {
+  width: 100%;
 }
