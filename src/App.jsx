@@ -179,9 +179,24 @@ export default function App() {
       {/* 상단 내비게이션 바 */}
       <nav className="fixed top-0 left-0 w-full z-[100] px-8 py-4 flex justify-between items-center bg-white/20 backdrop-blur-md border-b border-white/10 font-sans">
         <div onClick={() => scrollToSection('home')} className="flex items-center gap-3 cursor-pointer group transition-all">
-          <div className="w-8 h-8 bg-[#0F172A] rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-            <Zap className="text-white" size={16} fill="currentColor" />
+          
+          {/* --- public 폴더의 이미지를 사용하는 부분 --- */}
+          <div className="w-8 h-8 group-hover:scale-105 transition-transform">
+            <img 
+              src="/my-logo.svg" 
+              alt="CleVis Logo" 
+              className="w-full h-full object-contain shadow-sm rounded-lg"
+              onError={(e) => {
+                // 이미지가 없을 때를 대비한 백업 (기본 번개 아이콘)
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
+            />
+            <div className="hidden w-full h-full bg-[#0F172A] rounded-lg items-center justify-center">
+              <Zap className="text-white" size={16} fill="currentColor" />
+            </div>
           </div>
+
           <div>
             <span className="font-semibold text-lg tracking-tight block leading-none text-[#1c1c1c]">CleVis</span>
             <span className="text-[8px] font-sans text-red-400 font-bold uppercase tracking-widest mt-0.5 block">Beta v1.0</span>
@@ -346,7 +361,9 @@ export default function App() {
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-6">
             <div onClick={() => scrollToSection('home')} className="flex items-center gap-2 cursor-pointer group">
-              <div className="w-8 h-8 bg-[#0F172A] rounded-lg flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform"><Zap className="text-white" size={16} fill="currentColor" /></div>
+              <div className="w-8 h-8 group-hover:scale-105 transition-transform">
+                <img src="/my-logo.svg" alt="CleVis" className="w-full h-full object-contain" />
+              </div>
               <span className="font-bold text-xl tracking-tight text-gray-400">CleVis</span>
             </div>
           </div>
