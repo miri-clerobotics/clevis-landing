@@ -7,6 +7,11 @@ import {
   Copy, Check, MessageSquare, Monitor, Cpu
 } from 'lucide-react';
 
+// --- EmailJS 설정 (발급받은 키를 여기에 입력하세요) ---
+const EMAILJS_SERVICE_ID = "miri@clerobotics.com"; 
+const EMAILJS_TEMPLATE_ID = "template_i2fiowi";
+const EMAILJS_PUBLIC_KEY = "0rNqhon0xdP9HuLuZ";
+
 // --- 1. 데이터 정의 ---
 const nodeGroups = [
   { name: "Logic & Control", nodes: ["AND/OR Gate", "Timer (On/Off)", "Counter", "Latch Relays"], desc: "공정의 흐름을 지능적으로 제어하는 핵심 논리 소자입니다. 조건부 동작과 시퀀스 제어의 기초가 됩니다." },
@@ -120,10 +125,10 @@ const SectionTitle = ({ tag, title }) => (
 
 // --- 4. 메인 애플리케이션 ---
 export default function App() {
-  const [bgNodes, setBgNodes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isToastVisible, setIsToastVisible] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   
   const [inquiryData, setInquiryData] = useState({ 
@@ -133,6 +138,22 @@ export default function App() {
   const containerRef = useRef(null);
   const librarySectionRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: librarySectionRef, offset: ["start start", "end end"] });
+
+  // EmailJS를 브라우저 CDN에서 동적으로 로드 (빌드 오류 방지)
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+    script.async = true;
+    script.onload = () => {
+      if (window.emailjs) {
+        window.emailjs.init(EMAILJS_PUBLIC_KEY);
+      }
+    };
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     const index = Math.min(Math.floor(latest * nodeGroups.length), nodeGroups.length - 1);
@@ -160,22 +181,46 @@ export default function App() {
 
   const handleInquirySubmit = (e) => {
     e.preventDefault();
-    if (!inquiryData.agreed) return;
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setIsModalOpen(false);
-      setInquiryData({ type: '구매문의', processType: '위치보정 (장착/ 조립 등)', company: '', name: '', position: '', phone: '', email: '', message: '', agreed: false });
-    }, 2000);
-  };
+    if (!inquiryData.agreed || isSending) return;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newNode = { id: Math.random(), x: Math.random() * 80 + 10, y: Math.random() * 80 + 10, title: `Node_${Math.floor(Math.random() * 99)}`, scale: 0.6 };
-      setBgNodes(prev => [...prev.slice(-3), newNode]);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+    if (!window.emailjs) {
+        alert("이메일 서비스가 아직 로드되지 않았습니다. 잠시 후 다시 시도해 주세요.");
+        return;
+    }
+
+    setIsSending(true);
+
+    const templateParams = {
+      type: inquiryData.type,
+      processType: inquiryData.processType,
+      company: inquiryData.company,
+      name: inquiryData.name,
+      position: inquiryData.position,
+      phone: inquiryData.phone,
+      email: inquiryData.email,
+      message: inquiryData.message
+    };
+
+    window.emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID,
+      templateParams,
+      EMAILJS_PUBLIC_KEY
+    )
+    .then(() => {
+      setIsSending(false);
+      setIsSubmitted(true);
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setIsModalOpen(false);
+        setInquiryData({ type: '구매문의', processType: '위치보정 (장착/ 조립 등)', company: '', name: '', position: '', phone: '', email: '', message: '', agreed: false });
+      }, 2500);
+    }, (error) => {
+      console.error('EmailJS Error:', error);
+      setIsSending(false);
+      alert("전송에 실패했습니다. hello@clerobotics.com으로 메일을 직접 보내주시기 바랍니다.");
+    });
+  };
 
   return (
     <div ref={containerRef} className="w-full bg-[#F8F9FB] relative flex flex-col font-sans selection:bg-red-500 selection:text-white pt-[140px]">
@@ -198,14 +243,14 @@ export default function App() {
         </div>
       </nav>
 
-      {/* 1. HERO SECTION */}
+      {/* 1. HERO SECTION (Font weight reduced per request) */}
       <section id="home" className="min-h-[75vh] relative flex flex-col items-center justify-center p-8 overflow-hidden text-center">
         <div className="container mx-auto max-w-[1280px] flex flex-col items-center z-20">
             <div className="perspective-[2500px] mb-20">
                 <PLCNode title="Load 3D data from file" subTitle="Image 3D" isMain={true} glow={true} />
             </div>
             <div className="text-center max-w-5xl px-4 flex flex-col items-center">
-                <h1 className="text-4xl md:text-7xl font-semibold text-[#0F172A] mb-8 leading-[1.1] tracking-tight">
+                <h1 className="text-4xl md:text-7xl font-medium text-[#0F172A] mb-8 leading-[1.1] tracking-tight">
                     Next-Gen Low-Code Engine for <br className="hidden md:block" />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-50 px-2">
                         Vision Workflows
@@ -219,7 +264,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 2. FEATURES SECTION (그림자 효과 축소 반영) */}
+      {/* 2. FEATURES SECTION (Subtle Shadows) */}
       <section id="features" className="min-h-screen flex flex-col justify-center py-32 bg-white relative z-10 px-8">
         <div className="container mx-auto max-w-[1280px]">
           <SectionTitle tag="Core strengths" title="산업 현장을 혁신하는 지능형 기술" />
@@ -297,7 +342,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 5. CONTACT SECTION (그림자 효과 축소 반영) */}
+      {/* 5. CONTACT SECTION (Subtle Shadows & No Icon) */}
       <section id="contact" className="min-h-[80vh] flex flex-col justify-center items-center py-24 bg-white relative overflow-hidden border-t border-gray-100 px-8">
         <div className="container mx-auto max-w-[1280px] text-center">
           <SectionTitle tag="Contact" title="클레비스 문의하기" />
@@ -309,7 +354,7 @@ export default function App() {
             >
               <h4 className="text-xl font-bold text-[#111827] mb-2 tracking-tight">지원</h4>
               <p className="text-[#6B7280] text-[15px] font-normal leading-relaxed mb-10 pr-4">클레비스에 관한 답변과 기술적인 도움을 드려요. <br/>전문팀이 신속하게 응대해 드립니다.</p>
-              <div className="mt-auto flex items-center gap-2 text-red-500 font-semibold text-[13px] uppercase tracking-widest font-sans transition-none">
+              <div className="mt-auto flex items-center gap-2 text-red-500 font-semibold text-[13px] uppercase tracking-widest font-sans">
                 상세 문의하기 <ArrowUpRight size={16} />
               </div>
             </div>
@@ -329,7 +374,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 브라우저 고정 토스트 */}
+      {/* Floating Toast */}
       <AnimatePresence>
         {isToastVisible && (
           <motion.div initial={{ opacity: 0, y: 50, x: "-50%" }} animate={{ opacity: 1, y: 0, x: "-50%" }} exit={{ opacity: 0, y: 50, x: "-50%" }} className="fixed bottom-12 left-1/2 z-[300] bg-[#0F172A] text-white px-8 py-4 rounded-full shadow-2xl flex items-center gap-3 border border-white/10 backdrop-blur-md">
@@ -339,7 +384,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* --- INQUIRY MODAL (라벨 기능 유지) --- */}
+      {/* --- INQUIRY MODAL (With Labels) --- */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
@@ -410,7 +455,13 @@ export default function App() {
                       <label htmlFor="privacy-agree" className="text-[12px] font-normal text-gray-600 cursor-pointer select-none font-sans">개인정보 수집 및 이용에 동의합니다.</label>
                     </div>
 
-                    <button type="submit" disabled={!inquiryData.agreed} className={`w-full py-4 rounded-xl font-semibold transition-all text-white font-sans ${inquiryData.agreed ? 'bg-[#1c1c1c] hover:bg-black cursor-pointer' : 'bg-gray-300 cursor-not-allowed'}`}>문의하기</button>
+                    <button 
+                      type="submit" 
+                      disabled={!inquiryData.agreed || isSending} 
+                      className={`w-full py-4 rounded-xl font-semibold transition-all text-white font-sans ${inquiryData.agreed && !isSending ? 'bg-[#1c1c1c] hover:bg-black cursor-pointer' : 'bg-gray-300 cursor-not-allowed'}`}
+                    >
+                      {isSending ? "전송 중..." : "문의하기"}
+                    </button>
                   </form>
                 </div>
               )}
