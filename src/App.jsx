@@ -20,8 +20,8 @@ const nodeGroups = [
 const strengths = [
   { 
     icon: Layers, 
-    title: "무한 확장성", 
-    desc: "코드 레벨의 직접적인 수정 없이도 현장의 다변화된 요구사항에 맞춘 유연한 로직 구성과 파라미터 최적화가 가능합니다." 
+    title: "비주얼 프로그래밍", 
+    desc: "노드 기반 편집기 사용으로 코드 레벨의 직접적인 수정 없이도 현장의 다변화된 요구사항에 맞춘 유연한 로직 구성과 파라미터 최적화가 가능합니다." 
   },
   { 
     icon: BarChart3, 
@@ -35,8 +35,8 @@ const strengths = [
   },
   { 
     icon: Cpu, 
-    title: "높은 범용성", 
-    desc: "특정 센서 하드웨어나 로봇 시스템과의 연동 기능을 사용자 환경에 맞춰 자유롭게 추가하고 대응할 수 있는 높은 범용성을 갖추고 있습니다." 
+    title: "멀티 디바이스 통합 관리", 
+    desc: "특정 센서 하드웨어나 로봇 시스템과의 연동 기능을 사용자 환경에 맞춰 자유롭게 추가하고 대응할 수 있는 높은 범용성, 현장 안정성을 갖추고 있습니다." 
   },
   { 
     icon: Monitor, 
@@ -100,7 +100,7 @@ const PLCNode = ({ title = "Node Title", subTitle = "Category", isMain = false, 
             <span className="text-[#374151] text-[11px] font-semibold leading-none">Flow port</span>
           </div>
           <div className="w-3 h-3 bg-white rounded-full border-[1.5px] border-[#666] absolute right-[-14px] top-1/2 -translate-y-1/2 z-20">
-            {idx === 0 && <div className="absolute inset-0 bg-red-400 rounded-full animate-ping opacity-40" />}
+              {idx === 0 && <div className="absolute inset-0 bg-red-400 rounded-full animate-ping opacity-40" />}
           </div>
         </div>
       ))}
@@ -169,6 +169,14 @@ export default function App() {
     }, 2000);
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newNode = { id: Math.random(), x: Math.random() * 80 + 10, y: Math.random() * 80 + 10, title: `Node_${Math.floor(Math.random() * 99)}`, scale: 0.6 };
+      setBgNodes(prev => [...prev.slice(-3), newNode]);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div ref={containerRef} className="w-full bg-[#F8F9FB] relative flex flex-col font-sans selection:bg-red-500 selection:text-white pt-[140px]">
       
@@ -211,14 +219,14 @@ export default function App() {
         </div>
       </section>
 
-      {/* 2. FEATURES SECTION */}
+      {/* 2. FEATURES SECTION (그림자 효과 축소 반영) */}
       <section id="features" className="min-h-screen flex flex-col justify-center py-32 bg-white relative z-10 px-8">
         <div className="container mx-auto max-w-[1280px]">
           <SectionTitle tag="Core strengths" title="산업 현장을 혁신하는 지능형 기술" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
             {strengths.map((s, i) => (
-              <div key={i} className="p-10 rounded-3xl border border-gray-100 bg-[#F9FAFB] hover:bg-white hover:shadow-2xl transition-all group text-left">
-                <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center text-red-500 mb-8 group-hover:bg-red-400 group-hover:text-white transition-colors"><s.icon size={26} /></div>
+              <div key={i} className="p-10 rounded-3xl border border-gray-100 bg-[#F9FAFB] hover:bg-white shadow-sm hover:shadow-md transition-all group text-left">
+                <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center text-red-400 mb-8 group-hover:bg-red-400 group-hover:text-white transition-colors"><s.icon size={26} /></div>
                 <h3 className="text-xl font-semibold text-[#0F172A] mb-4">{s.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed font-normal">{s.desc}</p>
               </div>
@@ -274,7 +282,7 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-16">
                 {cases.map((c, i) => (
                 <div key={i} className="group cursor-pointer text-center">
-                    <div className="aspect-video rounded-3xl bg-[#F9FAFB] mb-6 overflow-hidden relative shadow-md border border-gray-100 transition-all hover:shadow-xl">
+                    <div className="aspect-video rounded-3xl bg-[#F9FAFB] mb-6 overflow-hidden relative shadow-sm border border-gray-100 transition-all hover:shadow-md">
                         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-red-50 to-orange-50 group-hover:scale-110 transition-transform duration-700">
                             <c.icon size={50} className="text-red-200 group-hover:text-red-400 transition-colors" />
                         </div>
@@ -289,13 +297,16 @@ export default function App() {
         </div>
       </section>
 
-      {/* 5. CONTACT SECTION */}
+      {/* 5. CONTACT SECTION (그림자 효과 축소 반영) */}
       <section id="contact" className="min-h-[80vh] flex flex-col justify-center items-center py-24 bg-white relative overflow-hidden border-t border-gray-100 px-8">
         <div className="container mx-auto max-w-[1280px] text-center">
           <SectionTitle tag="Contact" title="클레비스 문의하기" />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 max-w-5xl mx-auto text-left">
-            <div onClick={() => setIsModalOpen(true)} className="flex flex-col items-start p-10 bg-white rounded-[24px] border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-all hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:border-gray-200 group text-left cursor-pointer h-full relative">
+            <div 
+              onClick={() => setIsModalOpen(true)} 
+              className="flex flex-col items-start p-10 bg-white rounded-[24px] border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all hover:shadow-[0_8px_25px_rgba(0,0,0,0.05)] hover:border-gray-200 group text-left cursor-pointer h-full relative"
+            >
               <h4 className="text-xl font-bold text-[#111827] mb-2 tracking-tight">지원</h4>
               <p className="text-[#6B7280] text-[15px] font-normal leading-relaxed mb-10 pr-4">클레비스에 관한 답변과 기술적인 도움을 드려요. <br/>전문팀이 신속하게 응대해 드립니다.</p>
               <div className="mt-auto flex items-center gap-2 text-red-500 font-semibold text-[13px] uppercase tracking-widest font-sans transition-none">
@@ -303,7 +314,10 @@ export default function App() {
               </div>
             </div>
 
-            <div onClick={copyEmail} className="flex flex-col items-start p-10 bg-white rounded-[24px] border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-all hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:border-gray-200 group text-left cursor-pointer h-full relative overflow-hidden">
+            <div 
+              onClick={copyEmail} 
+              className="flex flex-col items-start p-10 bg-white rounded-[24px] border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all hover:shadow-[0_8px_25px_rgba(0,0,0,0.05)] hover:border-gray-200 group text-left cursor-pointer h-full relative overflow-hidden"
+            >
               <h4 className="text-xl font-bold text-[#111827] mb-2 tracking-tight">기타문의</h4>
               <p className="text-[#6B7280] text-[15px] font-normal leading-relaxed mb-10 pr-4">다른 궁금한 점이 있으신가요? <br/>메일 주소를 복사하여 직접 문의를 남겨주세요.</p>
               <div className="mt-auto flex items-center gap-3 px-5 py-3 bg-[#F9FAFB] rounded-xl border border-gray-100 group-hover:bg-gray-100 transition-colors w-full justify-between">
@@ -315,7 +329,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 브라우저 토스트 */}
+      {/* 브라우저 고정 토스트 */}
       <AnimatePresence>
         {isToastVisible && (
           <motion.div initial={{ opacity: 0, y: 50, x: "-50%" }} animate={{ opacity: 1, y: 0, x: "-50%" }} exit={{ opacity: 0, y: 50, x: "-50%" }} className="fixed bottom-12 left-1/2 z-[300] bg-[#0F172A] text-white px-8 py-4 rounded-full shadow-2xl flex items-center gap-3 border border-white/10 backdrop-blur-md">
@@ -325,7 +339,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* --- INQUIRY MODAL (라벨 추가됨) --- */}
+      {/* --- INQUIRY MODAL (라벨 기능 유지) --- */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
@@ -344,7 +358,6 @@ export default function App() {
                   <p className="text-gray-500 mb-8 font-normal font-sans text-sm text-left opacity-80">고객님의 환경에 최적화된 솔루션을 제안해 드립니다.</p>
                   
                   <form onSubmit={handleInquirySubmit} className="space-y-5">
-                    {/* 문의/공정 유형 라벨 적용 */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                       <div className="space-y-1.5">
                         <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">문의 유형</label>
@@ -360,7 +373,6 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* 회사명/성명 라벨 적용 */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
                         <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">회사명 / 지역</label>
@@ -372,7 +384,6 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* 직급/연락처 라벨 적용 */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
                         <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">직급</label>
@@ -384,13 +395,11 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* 이메일 라벨 적용 */}
                     <div className="space-y-1.5">
                       <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">회신 받을 이메일 주소</label>
                       <input type="email" required placeholder="example@email.com" value={inquiryData.email} onChange={(e) => setInquiryData({...inquiryData, email: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal" />
                     </div>
 
-                    {/* 문의내용 라벨 적용 */}
                     <div className="space-y-1.5">
                       <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">문의 내용</label>
                       <textarea maxLength={1000} rows={4} required placeholder="구체적인 문의 내용을 작성해 주세요." value={inquiryData.message} onChange={(e) => setInquiryData({...inquiryData, message: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal resize-none h-32" />
