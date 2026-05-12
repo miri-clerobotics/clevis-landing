@@ -55,7 +55,7 @@ const strengths = [
   { icon: Globe, title: "디지털 트윈 기능", desc: "현실 로봇 데이터가 실시간으로 전송되어 3D 가상 공간과 실제 공정이 완벽하게 일치합니다." }
 ];
 
-// --- 산업분야 사례 데이터 ---
+// --- 산업분야 사례 데이터 (이미지 경로 및 타이틀 업데이트) ---
 const cases = [
   { 
     icon: Factory, 
@@ -63,11 +63,36 @@ const cases = [
     industry: "Manufacturing", 
     image: "/images/app-1.jpg" 
   },
-  { icon: Truck, title: "지능형 물류 분류 시스템", industry: "Logistics" },
-  { icon: Flame, title: "에너지 최적화 그리드 관리", industry: "Energy" },
-  { icon: Bot, title: "협동 로봇 정밀 협업 제어", industry: "Robotics" },
-  { icon: Droplets, title: "수처리 시설 통합 모니터링", industry: "Infrastructure" },
-  { icon: FlaskConical, title: "제약 화학 공정 배치 제어", industry: "Pharmaceutical" }
+  { 
+    icon: Truck, 
+    title: "지능형 물류 분류 시스템", 
+    industry: "Logistics",
+    image: "/images/app-2.jpg"
+  },
+  { 
+    icon: Flame, 
+    title: "에너지 최적화 그리드 관리", 
+    industry: "Energy",
+    image: "/images/app-3.jpg"
+  },
+  { 
+    icon: Bot, 
+    title: "협동 로봇 정밀 협업 제어", 
+    industry: "Robotics",
+    image: "/images/app-4.jpg"
+  },
+  { 
+    icon: Droplets, 
+    title: "수처리 시설 통합 모니터링", 
+    industry: "Infrastructure",
+    image: "/images/app-5.jpg"
+  },
+  { 
+    icon: FlaskConical, 
+    title: "제약 화학 공정 배치 제어", 
+    industry: "Pharmaceutical",
+    image: "/images/app-6.jpg"
+  }
 ];
 
 // --- 2. 컴포넌트: PLC 노드 비주얼 ---
@@ -219,16 +244,17 @@ export default function App() {
         </div>
       </nav>
 
-      {/* 1. HERO SECTION (가변 폰트 크기 적용) */}
+      {/* 1. HERO SECTION (반응형 텍스트 크기 최적화) */}
       <section id="home" className="min-h-[75vh] relative flex flex-col items-center justify-center p-8 overflow-hidden text-center">
         <div className="container mx-auto max-w-[1280px] flex flex-col items-center z-20">
             <div className="perspective-[2500px] mb-20">
                 <PLCNode title="Load 3D data from file" subTitle="Image 3D" isMain={true} glow={true} />
             </div>
             <div className="text-center max-w-5xl px-4 flex flex-col items-center">
-                <h1 className="text-[9vw] sm:text-6xl md:text-7xl lg:text-[4.5rem] font-bold text-[#0F172A] mb-8 leading-[1.1] tracking-tight break-keep">
+                {/* 1068px 등 중간 너비에서 줄바꿈 문제를 해결하기 위해 clamp로 최소/최대 크기를 고정하고 vw로 유동성 확보 */}
+                <h1 className="text-[clamp(2.5rem,8vw,5.5rem)] font-bold text-[#0F172A] mb-8 leading-[1.1] tracking-tight break-keep">
                     Next-Gen Low-Code Engine for <br className="hidden md:block" />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600 px-2">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600 px-2 inline-block">
                         Vision Workflows
                     </span>
                 </h1>
@@ -293,14 +319,15 @@ export default function App() {
         </div>
       </section>
 
-      {/* 4. APPLICATION SECTION (뱃지 삭제 및 디자인 정제) */}
+      {/* 4. APPLICATION SECTION (이미지 줌인 효과 및 간격 조정) */}
       <section id="application" className="min-h-screen flex flex-col justify-center py-32 bg-white relative z-10 px-8 text-center">
         <div className="container mx-auto max-w-[1280px]">
             <SectionTitle tag="Industrial applications" title="산업분야별 혁신적인 적용 사례" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-16">
                 {cases.map((c, i) => (
                 <div key={i} className="group cursor-pointer text-center">
-                    <div className="aspect-video rounded-3xl bg-[#F9FAFB] mb-6 overflow-hidden relative shadow-sm border border-gray-100 transition-all hover:shadow-md">
+                    {/* 카드 영역 고정 및 이미지 줌인 효과 (호버 그림자 삭제) */}
+                    <div className="aspect-video rounded-3xl bg-[#F9FAFB] mb-3 overflow-hidden relative border border-gray-100 transition-all">
                         <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
                             {c.image ? (
                                 <img src={c.image} alt={c.title} className="w-full h-full object-cover" onError={(e) => { e.target.style.display='none'; }} />
@@ -310,8 +337,8 @@ export default function App() {
                                 </div>
                             )}
                         </div>
-                        {/* 산업군 뱃지(Manufacturing 등)가 여기에서 삭제되었습니다. */}
                     </div>
+                    {/* 카드와 텍스트 간격 mb-6 -> mb-3으로 축소됨 */}
                     <h3 className="text-base md:text-lg font-semibold text-[#0F172A] group-hover:text-red-500 transition-colors flex items-center gap-2.5 px-2 justify-center">
                         {c.title}<ArrowUpRight size={18} className="opacity-0 group-hover:opacity-100 transition-all" />
                     </h3>
@@ -394,16 +421,16 @@ export default function App() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
                         <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">직급</label>
-                        <input type="text" required placeholder="예: 팀장" value={inquiryData.position} onChange={(e) => setInquiryData({...inquiryData, position: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal" />
+                        <input type="text" required placeholder="예: 팀장" value={inquiryData.position} onChange={(e) => setInquiryData({...inquiryData, position: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal shadow-none" />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">연락처</label>
-                        <input type="tel" required placeholder="010-0000-0000" value={inquiryData.phone} onChange={(e) => setInquiryData({...inquiryData, phone: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal" />
+                        <input type="tel" required placeholder="010-0000-0000" value={inquiryData.phone} onChange={(e) => setInquiryData({...inquiryData, phone: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal shadow-none" />
                       </div>
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">회신 받을 이메일 주소</label>
-                      <input type="email" required placeholder="example@email.com" value={inquiryData.email} onChange={(e) => setInquiryData({...inquiryData, email: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal" />
+                      <input type="email" required placeholder="example@email.com" value={inquiryData.email} onChange={(e) => setInquiryData({...inquiryData, email: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal shadow-none" />
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">문의 내용</label>
