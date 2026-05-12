@@ -116,7 +116,7 @@ const PLCNode = ({ title = "Node Title", subTitle = "Category", isMain = false, 
 const SectionTitle = ({ tag, title }) => (
   <div className="mb-10 text-center md:text-left flex flex-col items-center md:items-start">
     <div className="inline-flex items-center py-2 px-4 border border-gray-200 bg-white rounded-full backdrop-blur-md mb-5">
-      <span className="text-[12px] font-semibold tracking-[0.05em] uppercase text-red-500">{tag}</span>
+      <span className="text-[12px] font-semibold tracking-[0.05em] uppercase text-red-400">{tag}</span>
     </div>
     <h2 className="text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-[#0F172A]">{title}</h2>
   </div>
@@ -198,15 +198,26 @@ export default function App() {
   return (
     <div ref={containerRef} className="w-full bg-[#F8F9FB] relative flex flex-col font-sans selection:bg-red-500 selection:text-white pt-[140px]">
       
-      {/* 0. FLOATING HEADER */}
+      {/* 0. FLOATING HEADER (SVG 로고 적용) */}
       <nav className="fixed top-8 left-1/2 -translate-x-1/2 w-[calc(100%-40px)] md:w-[584px] h-[60px] z-[100] px-6 py-2 flex items-center gap-x-6 bg-white/40 backdrop-blur-xl border border-white/20 rounded-full shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] transition-all">
-        <div onClick={() => scrollToSection('home')} className="flex grow items-center gap-3 cursor-pointer group">
-          <div className="w-9 h-9 bg-[#0F172A] rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform shrink-0">
-            <Zap className="text-white" size={18} fill="currentColor" />
-          </div>
-          <div className="flex flex-col text-left">
-            <span className="font-semibold text-base tracking-tight leading-none text-[#1c1c1c]">CleVis</span>
-            <span className="text-[8px] text-red-400 font-bold uppercase tracking-widest mt-0.5">Beta v1.0</span>
+        <div onClick={() => scrollToSection('home')} className="flex grow items-center cursor-pointer group h-full">
+          {/* public 폴더의 my-logo.svg를 사용합니다. */}
+          <img 
+            src="/my-logo.svg" 
+            alt="CleVis Logo" 
+            className="h-7 w-auto object-contain transition-transform group-hover:scale-105"
+            onError={(e) => {
+              // 이미지 로드 실패 시 대체 텍스트/아이콘 로직 (이미지가 없을 경우 대비)
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
+            }}
+          />
+          {/* 폴백: 로고 이미지가 없을 경우 노출되는 기존 텍스트 디자인 */}
+          <div className="hidden items-center gap-3">
+            <div className="w-8 h-8 bg-[#0F172A] rounded-lg flex items-center justify-center shadow-sm">
+              <Zap className="text-white" size={16} fill="currentColor" />
+            </div>
+            <span className="font-semibold text-lg tracking-tight leading-none text-[#1c1c1c]">CleVis</span>
           </div>
         </div>
         <div className="flex items-center gap-5 text-[11px] font-semibold text-gray-500 tracking-[0.05em]">
@@ -244,7 +255,7 @@ export default function App() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 text-left">
             {strengths.map((s, i) => (
               <div key={i} className="p-10 rounded-3xl border border-gray-100 bg-[#F9FAFB] shadow-sm hover:shadow-md transition-all group">
-                <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center text-red-500 mb-8 group-hover:bg-red-400 group-hover:text-white transition-colors"><s.icon size={26} /></div>
+                <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center text-red-400 mb-8 group-hover:bg-red-400 group-hover:text-white transition-colors"><s.icon size={26} /></div>
                 <h3 className="text-xl font-semibold text-[#0F172A] mb-4">{s.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed font-normal">{s.desc}</p>
               </div>
@@ -253,7 +264,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 3. STICKY SCROLL LIBRARY SECTION (GROUP 뱃지 삭제됨) */}
+      {/* 3. STICKY SCROLL LIBRARY SECTION */}
       <section id="library" ref={librarySectionRef} className="relative bg-[#F3F4F6]" style={{ clipPath: 'inset(0 0 0 0)' }}>
         <div className="h-[600vh] w-full relative">
           <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden z-20">
@@ -274,7 +285,6 @@ export default function App() {
                     <div className="w-full max-w-xl text-center md:text-left flex flex-col items-center md:items-start">
                         <AnimatePresence mode="wait">
                         <motion.div key={activeIndex} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} transition={{ duration: 0.5 }}>
-                            {/* GROUP 뱃지가 여기에서 삭제되었습니다 */}
                             <h4 className="text-[#0F172A] text-2xl md:text-4xl font-bold mb-5 tracking-tight leading-none">{nodeGroups[activeIndex].name}</h4>
                             <p className="text-gray-500 text-sm md:text-lg leading-relaxed font-normal max-w-lg mb-8">{nodeGroups[activeIndex].desc}</p>
                             <div className="flex flex-wrap justify-center md:justify-start gap-2.5">
