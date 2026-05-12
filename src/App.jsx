@@ -55,7 +55,7 @@ const strengths = [
   { icon: Globe, title: "디지털 트윈 기능", desc: "현실 로봇 데이터가 실시간으로 전송되어 3D 가상 공간과 실제 공정이 완벽하게 일치합니다." }
 ];
 
-// --- 산업분야 사례 데이터 (이미지 경로 및 타이틀 업데이트) ---
+// --- 산업분야 사례 데이터 ---
 const cases = [
   { 
     icon: Factory, 
@@ -228,15 +228,41 @@ export default function App() {
   return (
     <div ref={containerRef} className="w-full bg-[#F8F9FB] relative flex flex-col font-sans selection:bg-red-500 selection:text-white pt-[140px]">
       
-      {/* 0. FLOATING HEADER */}
+      {/* 0. FLOATING HEADER (로고 고정 및 텍스트 슬라이딩 애니메이션) */}
       <nav className="fixed top-8 left-1/2 -translate-x-1/2 w-[calc(100%-40px)] md:w-[584px] h-[60px] z-[100] px-6 py-2 flex items-center gap-x-6 bg-white/40 backdrop-blur-xl border border-white/20 rounded-full shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] transition-all">
-        <div onClick={() => scrollToSection('home')} className="flex grow items-center cursor-pointer group h-full">
-          <img src="/my-logo.svg" alt="CleVis Logo" className="h-7 w-auto object-contain transition-transform group-hover:scale-105" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
-          <div className="hidden items-center gap-3">
-            <div className="w-8 h-8 bg-[#0F172A] rounded-lg flex items-center justify-center shadow-sm"><Zap className="text-white" size={16} fill="currentColor" /></div>
-            <span className="font-semibold text-lg tracking-tight leading-none text-[#1c1c1c]">CleVis</span>
+        <div onClick={() => scrollToSection('home')} className="flex grow items-center cursor-pointer group h-full relative overflow-hidden">
+          {/* SVG 로고 (public/my-logo.svg) */}
+          <div className="flex items-center h-full shrink-0">
+            <img 
+              src="/my-logo.svg" 
+              alt="CleVis Logo" 
+              className="h-7 w-auto object-contain transition-transform group-hover:scale-105" 
+              onError={(e) => { 
+                // 이미지 로드 실패 시 폴백으로 아이콘 노출
+                e.target.style.display = 'none'; 
+                e.target.nextSibling.style.display = 'flex'; 
+              }} 
+            />
+            <div className="hidden items-center justify-center w-7 h-7 bg-[#0F172A] rounded-lg">
+              <Zap className="text-white" size={14} fill="currentColor" />
+            </div>
+          </div>
+          
+          {/* 슬라이딩 텍스트 영역 (로고 우측) */}
+          <div className="relative h-7 ml-3 flex-1 overflow-hidden pointer-events-none">
+            <div className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:-translate-y-7">
+              {/* 기본 상태: CleVis */}
+              <div className="h-7 flex items-center">
+                <span className="font-bold text-[18px] tracking-tight leading-none text-[#1c1c1c]">CleVis</span>
+              </div>
+              {/* 호버 상태: BETA VERSION */}
+              <div className="h-7 flex items-center">
+                <span className="font-bold text-[11px] text-red-500 uppercase tracking-[0.15em] leading-none whitespace-nowrap">Beta Version</span>
+              </div>
+            </div>
           </div>
         </div>
+        
         <div className="flex items-center gap-5 text-[11px] font-semibold text-gray-500 tracking-[0.05em]">
           {['Features', 'Library', 'Applications', 'Contact'].map(item => (
             <button key={item} onClick={() => scrollToSection(item.toLowerCase())} className="hover:text-[#0F172A] transition-colors cursor-pointer whitespace-nowrap">{item}</button>
@@ -251,8 +277,7 @@ export default function App() {
                 <PLCNode title="Load 3D data from file" subTitle="Image 3D" isMain={true} glow={true} />
             </div>
             <div className="text-center max-w-5xl px-4 flex flex-col items-center">
-                {/* 1068px 등 중간 너비에서 줄바꿈 문제를 해결하기 위해 clamp로 최소/최대 크기를 고정하고 vw로 유동성 확보 */}
-                <h1 className="text-[clamp(2.5rem,8vw,5.5rem)] font-bold text-[#0F172A] mb-8 leading-[1.1] tracking-tight break-keep">
+                <h1 className="text-[clamp(2.5rem,7.5vw,5.5rem)] font-bold text-[#0F172A] mb-8 leading-[1.1] tracking-tight break-keep">
                     Next-Gen Low-Code Engine for <br className="hidden md:block" />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600 px-2 inline-block">
                         Vision Workflows
@@ -319,14 +344,13 @@ export default function App() {
         </div>
       </section>
 
-      {/* 4. APPLICATION SECTION (이미지 줌인 효과 및 간격 조정) */}
+      {/* 4. APPLICATION SECTION (줌인 효과 및 간격 조정) */}
       <section id="application" className="min-h-screen flex flex-col justify-center py-32 bg-white relative z-10 px-8 text-center">
         <div className="container mx-auto max-w-[1280px]">
             <SectionTitle tag="Industrial applications" title="산업분야별 혁신적인 적용 사례" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-16">
                 {cases.map((c, i) => (
                 <div key={i} className="group cursor-pointer text-center">
-                    {/* 카드 영역 고정 및 이미지 줌인 효과 (호버 그림자 삭제) */}
                     <div className="aspect-video rounded-3xl bg-[#F9FAFB] mb-3 overflow-hidden relative border border-gray-100 transition-all">
                         <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
                             {c.image ? (
@@ -338,7 +362,6 @@ export default function App() {
                             )}
                         </div>
                     </div>
-                    {/* 카드와 텍스트 간격 mb-6 -> mb-3으로 축소됨 */}
                     <h3 className="text-base md:text-lg font-semibold text-[#0F172A] group-hover:text-red-500 transition-colors flex items-center gap-2.5 px-2 justify-center">
                         {c.title}<ArrowUpRight size={18} className="opacity-0 group-hover:opacity-100 transition-all" />
                     </h3>
