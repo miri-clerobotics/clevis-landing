@@ -7,52 +7,52 @@ import {
   Copy, Check, MessageSquare, Monitor, Cpu
 } from 'lucide-react';
 
-// --- EmailJS 설정 (발급받은 키를 여기에 입력하세요) ---
+// --- EmailJS 설정 ---
 const EMAILJS_SERVICE_ID = "miri@clerobotics.com"; 
 const EMAILJS_TEMPLATE_ID = "template_i2fiowi";
 const EMAILJS_PUBLIC_KEY = "0rNqhon0xdP9HuLuZ";
 
 // --- 1. 데이터 정의 ---
 const nodeGroups = [
-  { name: "Logic & Control", nodes: ["AND/OR Gate", "Timer (On/Off)", "Counter", "Latch Relays"], desc: "공정의 흐름을 지능적으로 제어하는 핵심 논리 소자입니다. 조건부 동작과 시퀀스 제어의 기초가 됩니다." },
-  { name: "Math Functions", nodes: ["Arithmetic", "Scaling Node", "Average Filter", "Comparator"], desc: "정밀한 실시간 데이터 수치 연산 및 센서 데이터의 스케일링을 수행합니다. 복잡한 수식을 노드로 연결하여 계산합니다." },
-  { name: "Communication Hub", nodes: ["Modbus TCP/RTU", "MQTT Client", "EtherNet/IP", "REST WebHook"], desc: "이기종 장비 및 상위 시스템과의 완벽한 데이터 연동을 지원합니다. 클라우드와 현장을 잇는 가교 역할을 합니다." },
-  { name: "Sensor Processing", nodes: ["Temperature AI", "Pressure Input", "Flow Velocity", "Computer Vision"], desc: "현장의 복잡한 아날로그 신호를 정밀한 디지털 값으로 변환합니다. 인공지능 기반의 시각 판단 데이터를 처리합니다." },
-  { name: "Actuators & Drive", nodes: ["Servo Drive Pos", "Solenoid Valve", "VFD Speed Control"], desc: "정의된 로직에 따라 물리적 장비를 정밀하게 구동합니다. 위치 제어 및 속도 제어를 워크플로우에서 직접 관리합니다." },
-  { name: "AI Analytics", nodes: ["Anomaly Detection", "Trend Forecasting", "Edge OCR"], desc: "엣지 단에서 지능형 판단을 내리는 강력한 인공지능 노드입니다. 고장 예지 및 패턴 인식을 수행하여 가동 중단을 미연에 방지합니다." }
+  { 
+    name: "Logic & Control", 
+    nodes: ["FlowControl", "Boolean", "Iteration", "DateTime"], 
+    desc: "워크플로우의 실행 흐름을 결정하고 조건부 논리를 실행합니다. 복잡한 시퀀스 제어의 핵심이 되는 제어 소자입니다." 
+  },
+  { 
+    name: "Data Processing", 
+    nodes: ["Int16", "Int32", "Long", "Double", "String", "Convert"], 
+    desc: "현장의 실시간 데이터를 정밀하게 처리하고 변환합니다. 다양한 데이터 타입을 표준화하여 시스템 간의 정합성을 보장합니다." 
+  },
+  { 
+    name: "Vision System", 
+    nodes: ["2D Camera", "3D Camera", "Image2D", "Image3D", "Lighting"], 
+    desc: "이미지 획득부터 하드웨어 동기화까지 비전 공정의 기초를 담당합니다. 산업용 고성능 센서와의 완벽한 정합을 지원합니다." 
+  },
+  { 
+    name: "Robotics & Interface", 
+    nodes: ["Plc", "Robot", "RobotPose"], 
+    desc: "이기종 로봇과 PLC 간의 물리적 인터페이스를 제어합니다. 정밀한 좌표계 계산(Pose)과 실시간 장비 연동을 가능하게 합니다." 
+  },
+  { 
+    name: "Smart Analytics", 
+    nodes: ["Aritmetic", "Matrix", "Numeric", "Onnx"], 
+    desc: "고도화된 수치 연산 및 AI 모델 추론을 수행합니다. 딥러닝 기반의 분석 결과를 워크플로우에 직접 통합하여 지능형 제어를 실현합니다." 
+  },
+  { 
+    name: "Storage & Custom", 
+    nodes: ["DB", "List", "UserDefined"], 
+    desc: "데이터 영속성을 위한 저장소 연동 및 사용자만의 고유한 로직을 확장합니다. 시스템의 범용성을 극대화하는 유연한 설계를 제공합니다." 
+  }
 ];
 
 const strengths = [
-  { 
-    icon: Layers, 
-    title: "비주얼 프로그래밍", 
-    desc: "노드 기반 편집기 사용으로 코드 레벨의 직접적인 수정 없이도 현장의 다변화된 요구사항에 맞춘 유연한 로직 구성과 파라미터 최적화가 가능합니다." 
-  },
-  { 
-    icon: BarChart3, 
-    title: "정밀 분석", 
-    desc: "FineLocalizer와 FineInspector의 검증된 고정밀 분석 기능을 통합하여 제공하며, 고도화된 데이터 흐름 분석을 통해 장비 가동률 향상 및 장애 발생을 실시간으로 예측합니다." 
-  },
-  { 
-    icon: Shield, 
-    title: "로봇 시뮬레이션 기능", 
-    desc: "가상 환경에서의 정밀한 로봇 가이던스 시뮬레이션을 통해 리스크를 사전에 방지하고 테스트합니다." 
-  },
-  { 
-    icon: Cpu, 
-    title: "멀티 디바이스 통합 관리", 
-    desc: "특정 센서 하드웨어나 로봇 시스템과의 연동 기능을 사용자 환경에 맞춰 자유롭게 추가하고 대응할 수 있는 높은 범용성, 현장 안정성을 갖추고 있습니다." 
-  },
-  { 
-    icon: Monitor, 
-    title: "유연한 인터페이스 설계", 
-    desc: "가변형 화면 구성 기능(GUI 빌더)을 지원하여 현장 작업 환경과 관리 목적에 최적화된 대시보드 및 제어 화면을 직접 구성할 수 있습니다." 
-  },
-  { 
-    icon: Globe, 
-    title: "디지털 트윈 기능", 
-    desc: "현실 로봇 데이터가 실시간으로 전송되어 3D 가상 공간과 실제 공정이 완벽하게 일치합니다." 
-  }
+  { icon: Layers, title: "비주얼 프로그래밍", desc: "노드 기반 편집기 사용으로 코드 레벨의 직접적인 수정 없이도 현장의 다변화된 요구사항에 맞춘 유연한 로직 구성과 파라미터 최적화가 가능합니다." },
+  { icon: BarChart3, title: "정밀 분석", desc: "FineLocalizer와 FineInspector의 검증된 고정밀 분석 기능을 통합하여 제공하며, 장애 발생을 실시간으로 예측합니다." },
+  { icon: Shield, title: "로봇 시뮬레이션 기능", desc: "가상 환경에서의 정밀한 로봇 가이던스 시뮬레이션을 통해 리스크를 사전에 방지하고 테스트합니다." },
+  { icon: Cpu, title: "멀티 디바이스 통합 관리", desc: "특정 센서 하드웨어나 로봇 시스템과의 연동 기능을 사용자 환경에 맞춰 자유롭게 추가하고 대응할 수 있는 높은 범용성, 현장 안정성을 갖추고 있습니다." },
+  { icon: Monitor, title: "유연한 인터페이스 설계", desc: "가변형 화면 구성 기능(GUI 빌더)을 지원하여 현장 작업 환경과 관리 목적에 최적화된 대시보드 및 제어 화면을 직접 구성할 수 있습니다." },
+  { icon: Globe, title: "디지털 트윈 기능", desc: "현실 로봇 데이터가 실시간으로 전송되어 3D 가상 공간과 실제 공정이 완벽하게 일치합니다." }
 ];
 
 const cases = [
@@ -64,7 +64,7 @@ const cases = [
   { icon: FlaskConical, title: "제약 화학 공정 배치 제어", industry: "Pharmaceutical" }
 ];
 
-// --- 2. 컴포넌트: PLC 노드 ---
+// --- 2. 컴포넌트: PLC 노드 비주얼 ---
 const PLCNode = ({ title = "Node Title", subTitle = "Category", isMain = false, glow = false }) => (
   <div 
     className="bg-white p-2.5 rounded-[12px] flex flex-col z-10 mx-auto"
@@ -90,9 +90,8 @@ const PLCNode = ({ title = "Node Title", subTitle = "Category", isMain = false, 
           <div className="w-1 h-1 rounded-full bg-red-400 animate-pulse" />
           <div className="text-[#4B5563] text-[9px] font-bold uppercase tracking-tighter">LS electric</div>
         </div>
-        <div className="flex items-center gap-1 text-[#9CA3AF]">
-          <span className="text-[10px] font-normal tracking-tight">0.142s</span>
-          <Clock size={12} />
+        <div className="flex items-center gap-1 text-[#9CA3AF] text-[10px] font-normal tracking-tight">
+          0.142s <Clock size={12} />
         </div>
       </div>
     </div>
@@ -116,8 +115,8 @@ const PLCNode = ({ title = "Node Title", subTitle = "Category", isMain = false, 
 // --- 3. 컴포넌트: 섹션 제목 ---
 const SectionTitle = ({ tag, title }) => (
   <div className="mb-10 text-center md:text-left flex flex-col items-center md:items-start">
-    <div className="inline-flex items-center py-2 px-4 border border-gray-200 bg-white rounded-full backdrop-blur-md shadow-inner mb-5">
-      <span className="text-[12px] font-semibold tracking-[0.05em] uppercase text-red-400">{tag}</span>
+    <div className="inline-flex items-center py-2 px-4 border border-gray-200 bg-white rounded-full backdrop-blur-md mb-5">
+      <span className="text-[12px] font-semibold tracking-[0.05em] uppercase text-red-500">{tag}</span>
     </div>
     <h2 className="text-3xl md:text-4xl font-semibold tracking-tight leading-tight text-[#0F172A]">{title}</h2>
   </div>
@@ -139,20 +138,14 @@ export default function App() {
   const librarySectionRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: librarySectionRef, offset: ["start start", "end end"] });
 
-  // EmailJS를 브라우저 CDN에서 동적으로 로드 (빌드 오류 방지)
+  // EmailJS 라이브러리 로드
   useEffect(() => {
     const script = document.createElement('script');
     script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
     script.async = true;
-    script.onload = () => {
-      if (window.emailjs) {
-        window.emailjs.init(EMAILJS_PUBLIC_KEY);
-      }
-    };
+    script.onload = () => { if (window.emailjs) window.emailjs.init(EMAILJS_PUBLIC_KEY); };
     document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
+    return () => { if (document.body.contains(script)) document.body.removeChild(script); };
   }, []);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
@@ -182,31 +175,11 @@ export default function App() {
   const handleInquirySubmit = (e) => {
     e.preventDefault();
     if (!inquiryData.agreed || isSending) return;
-
-    if (!window.emailjs) {
-        alert("이메일 서비스가 아직 로드되지 않았습니다. 잠시 후 다시 시도해 주세요.");
-        return;
-    }
-
+    if (!window.emailjs) { alert("서비스 로드 중입니다."); return; }
     setIsSending(true);
 
-    const templateParams = {
-      type: inquiryData.type,
-      processType: inquiryData.processType,
-      company: inquiryData.company,
-      name: inquiryData.name,
-      position: inquiryData.position,
-      phone: inquiryData.phone,
-      email: inquiryData.email,
-      message: inquiryData.message
-    };
-
-    window.emailjs.send(
-      EMAILJS_SERVICE_ID,
-      EMAILJS_TEMPLATE_ID,
-      templateParams,
-      EMAILJS_PUBLIC_KEY
-    )
+    const templateParams = { ...inquiryData };
+    window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
     .then(() => {
       setIsSending(false);
       setIsSubmitted(true);
@@ -216,9 +189,9 @@ export default function App() {
         setInquiryData({ type: '구매문의', processType: '위치보정 (장착/ 조립 등)', company: '', name: '', position: '', phone: '', email: '', message: '', agreed: false });
       }, 2500);
     }, (error) => {
-      console.error('EmailJS Error:', error);
+      console.error(error);
       setIsSending(false);
-      alert("전송에 실패했습니다. hello@clerobotics.com으로 메일을 직접 보내주시기 바랍니다.");
+      alert("전송에 실패했습니다. 메일로 직접 문의 바랍니다.");
     });
   };
 
@@ -243,16 +216,16 @@ export default function App() {
         </div>
       </nav>
 
-      {/* 1. HERO SECTION (Font weight reduced per request) */}
+      {/* 1. HERO SECTION */}
       <section id="home" className="min-h-[75vh] relative flex flex-col items-center justify-center p-8 overflow-hidden text-center">
         <div className="container mx-auto max-w-[1280px] flex flex-col items-center z-20">
             <div className="perspective-[2500px] mb-20">
                 <PLCNode title="Load 3D data from file" subTitle="Image 3D" isMain={true} glow={true} />
             </div>
             <div className="text-center max-w-5xl px-4 flex flex-col items-center">
-                <h1 className="text-4xl md:text-7xl font-medium text-[#0F172A] mb-8 leading-[1.1] tracking-tight">
+                <h1 className="text-4xl md:text-7xl font-bold text-[#0F172A] mb-8 leading-[1.1] tracking-tight">
                     Next-Gen Low-Code Engine for <br className="hidden md:block" />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-50 px-2">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600 px-2">
                         Vision Workflows
                     </span>
                 </h1>
@@ -264,14 +237,14 @@ export default function App() {
         </div>
       </section>
 
-      {/* 2. FEATURES SECTION (Subtle Shadows) */}
+      {/* 2. FEATURES SECTION */}
       <section id="features" className="min-h-screen flex flex-col justify-center py-32 bg-white relative z-10 px-8">
         <div className="container mx-auto max-w-[1280px]">
           <SectionTitle tag="Core strengths" title="산업 현장을 혁신하는 지능형 기술" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 text-left">
             {strengths.map((s, i) => (
-              <div key={i} className="p-10 rounded-3xl border border-gray-100 bg-[#F9FAFB] hover:bg-white shadow-sm hover:shadow-md transition-all group text-left">
-                <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center text-red-400 mb-8 group-hover:bg-red-400 group-hover:text-white transition-colors"><s.icon size={26} /></div>
+              <div key={i} className="p-10 rounded-3xl border border-gray-100 bg-[#F9FAFB] shadow-sm hover:shadow-md transition-all group">
+                <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center text-red-500 mb-8 group-hover:bg-red-400 group-hover:text-white transition-colors"><s.icon size={26} /></div>
                 <h3 className="text-xl font-semibold text-[#0F172A] mb-4">{s.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed font-normal">{s.desc}</p>
               </div>
@@ -280,17 +253,17 @@ export default function App() {
         </div>
       </section>
 
-      {/* 3. STICKY SCROLL LIBRARY SECTION */}
+      {/* 3. STICKY SCROLL LIBRARY SECTION (GROUP 뱃지 삭제됨) */}
       <section id="library" ref={librarySectionRef} className="relative bg-[#F3F4F6]" style={{ clipPath: 'inset(0 0 0 0)' }}>
         <div className="h-[600vh] w-full relative">
           <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden z-20">
             <div className="container mx-auto max-w-[1280px] flex flex-col lg:flex-row items-center relative h-full">
                 <div className="w-full lg:w-1/2 flex flex-col justify-center px-12 md:px-0 text-left">
-                    <div className="inline-flex w-fit items-center py-2 px-4 border border-gray-200 bg-white rounded-full backdrop-blur-md shadow-inner mb-5">
+                    <div className="inline-flex w-fit items-center py-2 px-4 border border-gray-200 bg-white rounded-full backdrop-blur-md mb-5 shadow-none">
                         <span className="text-[12px] font-semibold uppercase text-red-400">Continuing to update</span>
                     </div>
                     <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#0F172A]">Advanced Node Library</h2>
-                    <p className="text-gray-600 text-lg md:text-xl leading-relaxed mt-4 pr-12 font-normal">23종 이상의 정밀 산업 노드를 통해 복잡한 공정도 시각적으로 구현하고 즉각적으로 가동할 수 있습니다.</p>
+                    <p className="text-gray-600 text-lg md:text-xl leading-relaxed mt-4 pr-12 font-normal opacity-80">25개 이상의 산업 특화 노드 카테고리를 통해 공정의 모든 과정을 시각적으로 완벽하게 구현할 수 있습니다.</p>
                 </div>
                 <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-12">
                     <AnimatePresence mode="wait">
@@ -301,9 +274,7 @@ export default function App() {
                     <div className="w-full max-w-xl text-center md:text-left flex flex-col items-center md:items-start">
                         <AnimatePresence mode="wait">
                         <motion.div key={activeIndex} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} transition={{ duration: 0.5 }}>
-                            <div className="inline-flex items-center bg-red-400/10 border border-red-400/20 rounded-lg px-5 py-2 mb-5">
-                                <span className="text-red-500 text-sm font-bold tracking-[0.15em]">GROUP {activeIndex + 1}</span>
-                            </div>
+                            {/* GROUP 뱃지가 여기에서 삭제되었습니다 */}
                             <h4 className="text-[#0F172A] text-2xl md:text-4xl font-bold mb-5 tracking-tight leading-none">{nodeGroups[activeIndex].name}</h4>
                             <p className="text-gray-500 text-sm md:text-lg leading-relaxed font-normal max-w-lg mb-8">{nodeGroups[activeIndex].desc}</p>
                             <div className="flex flex-wrap justify-center md:justify-start gap-2.5">
@@ -342,27 +313,19 @@ export default function App() {
         </div>
       </section>
 
-      {/* 5. CONTACT SECTION (Subtle Shadows & No Icon) */}
+      {/* 5. CONTACT SECTION */}
       <section id="contact" className="min-h-[80vh] flex flex-col justify-center items-center py-24 bg-white relative overflow-hidden border-t border-gray-100 px-8">
         <div className="container mx-auto max-w-[1280px] text-center">
           <SectionTitle tag="Contact" title="클레비스 문의하기" />
-          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 max-w-5xl mx-auto text-left">
-            <div 
-              onClick={() => setIsModalOpen(true)} 
-              className="flex flex-col items-start p-10 bg-white rounded-[24px] border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all hover:shadow-[0_8px_25px_rgba(0,0,0,0.05)] hover:border-gray-200 group text-left cursor-pointer h-full relative"
-            >
+            <div onClick={() => setIsModalOpen(true)} className="flex flex-col items-start p-10 bg-white rounded-[24px] border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all hover:shadow-[0_8px_25px_rgba(0,0,0,0.05)] hover:border-gray-200 group text-left cursor-pointer h-full relative">
               <h4 className="text-xl font-bold text-[#111827] mb-2 tracking-tight">지원</h4>
               <p className="text-[#6B7280] text-[15px] font-normal leading-relaxed mb-10 pr-4">클레비스에 관한 답변과 기술적인 도움을 드려요. <br/>전문팀이 신속하게 응대해 드립니다.</p>
-              <div className="mt-auto flex items-center gap-2 text-red-500 font-semibold text-[13px] uppercase tracking-widest font-sans">
+              <div className="mt-auto flex items-center gap-2 text-red-500 font-semibold text-[13px] uppercase tracking-widest font-sans transition-none">
                 상세 문의하기 <ArrowUpRight size={16} />
               </div>
             </div>
-
-            <div 
-              onClick={copyEmail} 
-              className="flex flex-col items-start p-10 bg-white rounded-[24px] border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all hover:shadow-[0_8px_25px_rgba(0,0,0,0.05)] hover:border-gray-200 group text-left cursor-pointer h-full relative overflow-hidden"
-            >
+            <div onClick={copyEmail} className="flex flex-col items-start p-10 bg-white rounded-[24px] border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all hover:shadow-[0_8px_25px_rgba(0,0,0,0.05)] hover:border-gray-200 group text-left cursor-pointer h-full relative overflow-hidden">
               <h4 className="text-xl font-bold text-[#111827] mb-2 tracking-tight">기타문의</h4>
               <p className="text-[#6B7280] text-[15px] font-normal leading-relaxed mb-10 pr-4">다른 궁금한 점이 있으신가요? <br/>메일 주소를 복사하여 직접 문의를 남겨주세요.</p>
               <div className="mt-auto flex items-center gap-3 px-5 py-3 bg-[#F9FAFB] rounded-xl border border-gray-100 group-hover:bg-gray-100 transition-colors w-full justify-between">
@@ -384,7 +347,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* --- INQUIRY MODAL (With Labels) --- */}
+      {/* --- INQUIRY MODAL --- */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
@@ -401,65 +364,54 @@ export default function App() {
                   <button onClick={() => setIsModalOpen(false)} className="absolute top-6 right-6 text-gray-400 hover:text-[#0F172A] cursor-pointer"><X size={24} /></button>
                   <h3 className="text-2xl font-bold text-[#0F172A] mb-2 font-sans text-left">상세 문의 접수</h3>
                   <p className="text-gray-500 mb-8 font-normal font-sans text-sm text-left opacity-80">고객님의 환경에 최적화된 솔루션을 제안해 드립니다.</p>
-                  
                   <form onSubmit={handleInquirySubmit} className="space-y-5">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">문의 유형</label>
+                        <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">문의 유형</label>
                         <select value={inquiryData.type} onChange={(e) => setInquiryData({...inquiryData, type: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-medium text-gray-700 cursor-pointer">
                           <option>구매문의</option><option>기술지원</option><option>기타문의</option>
                         </select>
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">공정 유형</label>
+                        <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">공정 유형</label>
                         <select value={inquiryData.processType} onChange={(e) => setInquiryData({...inquiryData, processType: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-medium text-gray-700 cursor-pointer">
                           <option>위치보정 (장착/ 조립 등)</option><option>물류 효율화를 위한 랜덤 팔레타이징(적재)</option><option>제품 조립 품질 향상을 위한 갭/단차 검사</option><option>제품 외관 품질검사를 위한 표면 검사</option><option>기타</option>
                         </select>
                       </div>
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">회사명 / 지역</label>
-                        <input type="text" required placeholder="예: 클레로보틱스 / 서울" value={inquiryData.company} onChange={(e) => setInquiryData({...inquiryData, company: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal" />
+                        <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">회사명 / 지역</label>
+                        <input type="text" required placeholder="예: 클레로보틱스 / 서울" value={inquiryData.company} onChange={(e) => setInquiryData({...inquiryData, company: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal shadow-none" />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">성명</label>
-                        <input type="text" required placeholder="성명을 입력해 주세요" value={inquiryData.name} onChange={(e) => setInquiryData({...inquiryData, name: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal" />
+                        <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">성명</label>
+                        <input type="text" required placeholder="성명을 입력해 주세요" value={inquiryData.name} onChange={(e) => setInquiryData({...inquiryData, name: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal shadow-none" />
                       </div>
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">직급</label>
-                        <input type="text" required placeholder="예: 팀장" value={inquiryData.position} onChange={(e) => setInquiryData({...inquiryData, position: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal" />
+                        <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">직급</label>
+                        <input type="text" required placeholder="예: 팀장" value={inquiryData.position} onChange={(e) => setInquiryData({...inquiryData, position: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal shadow-none" />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">연락처</label>
-                        <input type="tel" required placeholder="010-0000-0000" value={inquiryData.phone} onChange={(e) => setInquiryData({...inquiryData, phone: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal" />
+                        <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">연락처</label>
+                        <input type="tel" required placeholder="010-0000-0000" value={inquiryData.phone} onChange={(e) => setInquiryData({...inquiryData, phone: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal shadow-none" />
                       </div>
                     </div>
-
                     <div className="space-y-1.5">
-                      <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">회신 받을 이메일 주소</label>
-                      <input type="email" required placeholder="example@email.com" value={inquiryData.email} onChange={(e) => setInquiryData({...inquiryData, email: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal" />
+                      <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">회신 받을 이메일 주소</label>
+                      <input type="email" required placeholder="example@email.com" value={inquiryData.email} onChange={(e) => setInquiryData({...inquiryData, email: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal shadow-none" />
                     </div>
-
                     <div className="space-y-1.5">
-                      <label className="text-[12px] font-semibold text-[#0F172A] ml-1 uppercase opacity-70 tracking-wide">문의 내용</label>
+                      <label className="text-[12px] font-semibold text-[#0F172A] opacity-70 tracking-wide">문의 내용</label>
                       <textarea maxLength={1000} rows={4} required placeholder="구체적인 문의 내용을 작성해 주세요." value={inquiryData.message} onChange={(e) => setInquiryData({...inquiryData, message: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-red-400 transition-all text-[13px] font-normal resize-none h-32" />
                     </div>
-
                     <div className="flex items-center gap-3 py-1 text-left">
                       <input type="checkbox" id="privacy-agree" checked={inquiryData.agreed} onChange={(e) => setInquiryData({...inquiryData, agreed: e.target.checked})} className="w-5 h-5 rounded border-gray-300 text-red-500 focus:ring-red-400 cursor-pointer" />
-                      <label htmlFor="privacy-agree" className="text-[12px] font-normal text-gray-600 cursor-pointer select-none font-sans">개인정보 수집 및 이용에 동의합니다.</label>
+                      <label htmlFor="privacy-agree" className="text-[12px] font-normal text-gray-600 cursor-pointer select-none">개인정보 수집 및 이용에 동의합니다.</label>
                     </div>
-
-                    <button 
-                      type="submit" 
-                      disabled={!inquiryData.agreed || isSending} 
-                      className={`w-full py-4 rounded-xl font-semibold transition-all text-white font-sans ${inquiryData.agreed && !isSending ? 'bg-[#1c1c1c] hover:bg-black cursor-pointer' : 'bg-gray-300 cursor-not-allowed'}`}
-                    >
+                    <button type="submit" disabled={!inquiryData.agreed || isSending} className={`w-full py-4 rounded-xl font-semibold transition-all text-white font-sans ${inquiryData.agreed && !isSending ? 'bg-[#1c1c1c] hover:bg-black cursor-pointer' : 'bg-gray-300 cursor-not-allowed'}`}>
                       {isSending ? "전송 중..." : "문의하기"}
                     </button>
                   </form>
