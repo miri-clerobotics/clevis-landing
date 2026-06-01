@@ -106,7 +106,7 @@ const TRANSLATIONS = {
     heroDesc: "複雑な産業用ビジョンロジックを視覚的なワークフローで構築し、リアルタイムなインテリジェント工程制御を実現します。",
     coreStrengthsTag: "强み",
     coreStrengthsTitle: "産業現場を革新するインテリジェント技術",
-    libraryTag: "アップデート継続中",
+    libraryTag: "アップデート継続중",
     libraryTitle: "高度なノードライブラリ",
     libraryDesc: "25種類以上の産業特化ノードカテゴリにより、工程のすべてのプロセスを視覚的に実装できます。",
     appsTag: "産業別適用",
@@ -122,12 +122,12 @@ const TRANSLATIONS = {
     contactFormDesc: "お客様の環境に最適なソリューションをご提案いたします。",
     formType: "問い合わせ種別",
     formProcess: "工程種別",
-    formCompany: "会社名 / 地域",
-    formName: "氏名",
+    formCompany: "会社名 / 지역",
+    formName: "氏명",
     formPosition: "役職",
     formPhone: "連絡先",
     formEmail: "メールアドレス",
-    formContent: "問い合わせ内容",
+    formContent: "問い合わせ 내용",
     formPrivacy: "個人情報の収集・利用に同意します。",
     formSubmit: "送信する",
     formSending: "送信中...",
@@ -187,7 +187,7 @@ const STRENGTHS = {
     { icon: Layers, title: "ビジュアルプログラミング", desc: "ノードベースのエディタを使用することで、コードレベル의 直接修正なしに、現場の多様な要件に合わせた柔軟なロジック構成とパラメータ最適化が可能です。" },
     { icon: BarChart3, title: "精密分析", desc: "高度なデータフロー分析を通じて、装置의 稼働率を向上させ、障害発生をリアルタイムで予測します。" },
     { icon: Shield, title: "ロボットシミュレーション機能", desc: "仮想環境での精密なロボットガイダンスシミュレーションにより、リスクを事前に防止・テストします。" },
-    { icon: Cpu, title: "マルチデバイス統合管理", desc: "特定のセンサーハードウェアやロボットシステムとの連動機能を、ユーザー環境に合わせて自由に追加できる高い汎用性を備えています。" },
+    { icon: Cpu, title: "マルチデバイス統合管理", desc: "特定のセンサーハードウェアやロボットシステムとの連동 기능을、유저 환경에 맞춰 자유롭게 추가할 수 있는 높은 범용성을 갖추고 있습니다." },
     { icon: Monitor, title: "柔軟なインターフェース設計", desc: "可変型画面構成機能（GUIビルダー）をサポートし、現場の作業環境や管理目的に最適化されたダッシュボードと制御画面を直接構成できます。" },
     { icon: Globe, title: "デジタルツイン機能", desc: "現実のロボットデータがリアルタイムで送信され、3D仮想空間と実際のプロセスが完全に一致します。" }
   ]
@@ -372,7 +372,7 @@ export default function App() {
       {/* 0. FLOATING HEADER */}
       <nav className="fixed top-8 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] md:w-[700px] h-[60px] z-[100] px-4 md:px-6 py-2 flex items-center justify-between bg-white/70 backdrop-blur-xl border border-white/30 rounded-full shadow-[0_12px_40px_-10px_rgba(0,0,0,0.08)] transition-all">
         
-        {/* 로고 영역 */}
+        {/* 로고 영역 (상단 네비: 호버 시 세로 슬라이딩 애니메이션 유지) */}
         <div onClick={() => scrollToSection('home')} className="flex items-center cursor-pointer group h-full relative overflow-hidden shrink-0">
           <div className="flex items-center h-full shrink-0">
             <img src="/my-logo.svg" alt="CleVis Logo" className="h-6 md:h-7 w-auto object-contain transition-transform group-hover:scale-105 shrink-0" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
@@ -551,7 +551,7 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 mt-10 md:mt-16">
                 {activeCases.map((c, i) => (
                 <div key={i} className="group cursor-pointer text-center">
-                    <div className="aspect-video rounded-3xl bg-[#F9FAFB] mb-3 overflow-hidden relative border border-gray-100 transition-all">
+                    <div className="aspect-video rounded-3xl bg-[#F9FAFB] mb-3 overflow-hidden relative border border-gray-100 transition-all text-center">
                         <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
                             {c.image ? <img src={c.image} alt={c.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-50 to-orange-50"><c.icon size={40} className="text-red-200" /></div>}
                         </div>
@@ -612,7 +612,7 @@ export default function App() {
               {isSubmitted ? (
                 <div className="py-12 flex flex-col items-center text-center"><div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-6"><CheckCircle2 size={40} /></div><h3 className="text-2xl font-bold text-[#0F172A] mb-2">{TRANSLATIONS[lang].modalSuccessTitle}</h3><p className="text-gray-500 font-medium">{TRANSLATIONS[lang].modalSuccessDesc}</p></div>
               ) : (
-                <div className="text-left">
+                <div className="text-left font-sans">
                   <button onClick={() => setIsModalOpen(false)} className="absolute top-6 right-6 text-gray-400 hover:text-[#0F172A] cursor-pointer"><X size={24} /></button>
                   <h3 className="text-2xl font-bold text-[#0F172A] mb-2">{"상세 문의 접수"}</h3>
                   <p className="text-gray-500 mb-8 text-sm opacity-80 break-keep font-medium">{TRANSLATIONS[lang].contactFormDesc}</p>
@@ -621,7 +621,7 @@ export default function App() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4"><div className="space-y-1.5"><label className="text-[12px] font-bold text-[#0F172A] opacity-70">{TRANSLATIONS[lang].formCompany}</label><input type="text" required placeholder="클레로보틱스 / 서울" value={inquiryData.company} onChange={(e) => setInquiryData({...inquiryData, company: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none text-[13px] font-medium" /></div><div className="space-y-1.5"><label className="text-[12px] font-bold text-[#0F172A] opacity-70">{TRANSLATIONS[lang].formName}</label><input type="text" required placeholder="성명을 입력해 주세요" value={inquiryData.name} onChange={(e) => setInquiryData({...inquiryData, name: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none text-[13px] font-medium" /></div></div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4"><div className="space-y-1.5"><label className="text-[12px] font-bold text-[#0F172A] opacity-70">{TRANSLATIONS[lang].formPosition}</label><input type="text" required placeholder="예: 팀장" value={inquiryData.position} onChange={(e) => setInquiryData({...inquiryData, position: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none text-[13px] font-medium shadow-none" /></div><div className="space-y-1.5"><label className="text-[12px] font-bold text-[#0F172A] opacity-70">{TRANSLATIONS[lang].formPhone}</label><input type="tel" required placeholder="010-0000-0000" value={inquiryData.phone} onChange={(e) => setInquiryData({...inquiryData, phone: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none text-[13px] font-medium shadow-none" /></div></div>
                     <div className="space-y-1.5"><label className="text-[12px] font-bold text-[#0F172A] opacity-70">{TRANSLATIONS[lang].formEmail}</label><input type="email" required placeholder="example@email.com" value={inquiryData.email} onChange={(e) => setInquiryData({...inquiryData, email: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none text-[13px] font-medium shadow-none" /></div>
-                    <div className="space-y-1.5"><label className="text-[12px] font-bold text-[#0F172A] opacity-70">{TRANSLATIONS[lang].formContent}</label><textarea maxLength={1000} rows={4} required placeholder="문의 내용을 작성해 주세요." value={inquiryData.message} onChange={(e) => setInquiryData({...inquiryData, message: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none text-[13px] font-medium resize-none h-32" /></div>
+                    <div className="space-y-1.5"><label className="text-[12px] font-bold text-[#0F172A] opacity-70">{TRANSLATIONS[lang].formContent}</label><textarea maxLength={1000} rows={4} required placeholder="문의 내용을 작성해 주세요." value={inquiryData.message} onChange={(e) => setInquiryData({...inquiryData, message: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none text-[13px] font-normal resize-none h-32" /></div>
                     <div className="flex items-center gap-3 py-1"><input type="checkbox" id="privacy-agree" checked={inquiryData.agreed} onChange={(e) => setInquiryData({...inquiryData, agreed: e.target.checked})} className="w-5 h-5 rounded border-gray-300 text-red-500 focus:ring-red-400" /><label htmlFor="privacy-agree" className="text-[12px] font-medium text-gray-600 cursor-pointer">{TRANSLATIONS[lang].formPrivacy}</label></div>
                     <button type="submit" disabled={!inquiryData.agreed || isSending} className={`w-full py-4 rounded-xl font-bold transition-all text-white ${inquiryData.agreed && !isSending ? 'bg-[#1c1c1c] hover:bg-black cursor-pointer' : 'bg-gray-300 cursor-not-allowed'}`}>{isSending ? TRANSLATIONS[lang].formSending : TRANSLATIONS[lang].formSubmit}</button>
                   </form>
@@ -633,17 +633,37 @@ export default function App() {
       </AnimatePresence>
 
       {/* FOOTER */}
-      <footer className="bg-[#f9f9f9] border-t border-gray-200 py-20 px-8 md:px-20 font-sans text-gray-500 text-[14px] leading-relaxed relative z-10 text-left font-medium">
-        <div className="container mx-auto max-w-[1280px]">
-          <div onClick={() => scrollToSection('home')} className="flex items-center gap-4 cursor-pointer group mb-10"><div className="w-10 h-10 bg-[#0F172A] rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform"><Zap className="text-white" size={20} fill="currentColor" /></div><span className="font-bold text-2xl tracking-tight text-gray-700">CleVis</span></div>
-          <div className="mb-14 text-[12px] md:text-[13px]">
-            <div className="font-bold mb-4 text-gray-700 uppercase tracking-wide">클레로보틱스 주식회사</div>
-            <div className="space-y-3 font-medium">
-              <div className="flex flex-wrap gap-x-6 items-center"><span><strong>사업자등록번호</strong> 157-86-02249</span><span className="hidden md:inline opacity-30 text-gray-300">|</span><span><strong>이메일</strong> hello@clerobotics.com</span></div>
-              <div className="pt-4 grid gap-3"><p><strong>본사 (기술연구소)</strong> 04778 서울 성동구 왕십리로 58, 511호-514호, 517호</p><p><strong>시스템연구소 (데모/전시)</strong> 15847 경기 군포시 공단로 117, 1층</p></div>
+      <footer className="bg-[#f9f9f9] border-t border-gray-200 py-20 w-full relative z-10 text-left font-medium">
+        {/* 네비게이션 가로폭 w-[calc(100%-32px)] md:w-[700px] 과 정확하게 정렬되도록 레이아웃 매칭 */}
+        <div className="mx-auto w-[calc(100%-32px)] md:w-[700px]">
+          {/* 푸터 로고 영역 (상단 네비와 똑같이 아이콘과 텍스트 크기 일치, 그림자 및 호버 슬라이딩 애니메이션 제거) */}
+          <div onClick={() => scrollToSection('home')} className="flex items-center cursor-pointer group h-7 shrink-0 mb-10 w-fit">
+            <div className="flex items-center h-full shrink-0">
+              <img src="/my-logo.svg" alt="CleVis Logo" className="h-6 md:h-7 w-auto object-contain transition-transform group-hover:scale-105 shrink-0" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
+              <div className="hidden items-center justify-center w-7 h-7 bg-[#0F172A] rounded-lg">
+                <Zap className="text-white" size={14} fill="currentColor" />
+              </div>
+            </div>
+            <div className="ml-2 md:ml-3 font-sans h-6 md:h-7 flex items-center">
+              <span className="font-bold text-[16px] md:text-[18px] tracking-tight text-[#1c1c1c]">CleVis</span>
             </div>
           </div>
-          <div className="border-t border-gray-200 pt-10 text-[11px] md:text-sm opacity-70">Copyright ⓒ 클레로보틱스 주식회사. All Rights Reserved.</div>
+          {/* CleVis 제외한 그외 텍스트는 회색으로 일관성 있게 일괄 조정 */}
+          <div className="mb-14 text-[12px] md:text-[13px] text-gray-500">
+            <div className="font-bold mb-4 text-gray-400 uppercase tracking-wide">클레로보틱스 주식회사</div>
+            <div className="space-y-3 font-medium text-gray-500">
+              <div className="flex flex-wrap gap-x-6 items-center">
+                <span><strong className="font-bold text-gray-500">사업자등록번호</strong> 157-86-02249</span>
+                <span className="hidden md:inline opacity-30 text-gray-300">|</span>
+                <span><strong className="font-bold text-gray-500">이메일</strong> hello@clerobotics.com</span>
+              </div>
+              <div className="pt-4 grid gap-3 font-medium text-gray-500">
+                <p><strong className="font-bold text-gray-500">본사 (기술연구소)</strong> 04778 서울 성동구 왕십리로 58, 511호-514호, 517호</p>
+                <p><strong className="font-bold text-gray-500">시스템연구소 (데모/전시)</strong> 15847 경기 군포시 공단로 117, 1층</p>
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-gray-200 pt-10 text-[11px] md:text-sm text-gray-400 opacity-80">Copyright ⓒ 클레로보틱스 주식회사. All Rights Reserved.</div>
         </div>
       </footer>
     </div>
